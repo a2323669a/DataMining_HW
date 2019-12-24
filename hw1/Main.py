@@ -8,8 +8,8 @@ import hw1.cluster_method as cluster
 
 if __name__ == '__main__':
     datasets = {
-        'digit' : utils.prepare_data_digits,
-        'newsgroups' : utils.prepare_data_news
+        'newsgroups' : utils.prepare_data_news,
+        'digit' : utils.prepare_data_digits
     }
 
     methods = {
@@ -18,11 +18,12 @@ if __name__ == '__main__':
         'MeanShift' : cluster.ms_grid,
         'SpectralClustering' : cluster.sc_grid,
         'AgglomerativeClustering' : cluster.ag_grid,
-        'DBSCAN' : cluster.db_grid
+        'DBSCAN' : cluster.db_grid,
+        'WardHierarchicalClustering' : cluster.wh_grid
     }
 
     for data_key in datasets.keys():
         data, labels, categories = datasets[data_key]()
         for cluster_key in methods.keys():
             grid = methods[cluster_key](data, labels, categories, n_iter = 20)
-            utils.report_csv(grid, "./hw1/result", data_key+"_"+cluster_key)
+            utils.report_csv(grid, "./result", data_key+"_"+cluster_key)

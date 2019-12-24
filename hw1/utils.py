@@ -97,8 +97,17 @@ def prepare_data_iris() -> Tuple[np.ndarray, np.ndarray, int]:
 
     return data, target, categories
 
-def prepare_data_news(n_feature :int = 10000) -> Tuple[np.ndarray, np.ndarray, int]:
-    dataset = fetch_20newsgroups(subset='all', shuffle=True, random_state=42)
+def prepare_data_news(n_feature :int = 4096) -> Tuple[np.ndarray, np.ndarray, int]:
+    categories = [
+        'alt.atheism',
+        'talk.religion.misc',
+        'comp.graphics',
+        'sci.space',
+        'misc.forsale',
+        'rec.autos'
+    ]
+
+    dataset = fetch_20newsgroups(subset='all', shuffle=True, random_state=42, categories=categories)
 
     y = dataset.target
     true_k = np.unique(y).shape[0]
@@ -121,6 +130,8 @@ def report_csv(grid :RandomizedSearchCV, path :str, filename :str):
 
     df :pd.DataFrame = pd.DataFrame(grid.cv_results_).sort_values(by='rank_test_refit', axis=0).loc[:, cols]
 
-    file = os.path.join(path, filename+".csv")
+    file = path+"/"+filename+".csv"
 
     df.to_csv(file, index=False)
+
+    print("{} has saved".format(file))
